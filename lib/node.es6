@@ -44,6 +44,7 @@ class Node {
         )
       }
     }
+    this.touched = false
     for (let name in defaults) {
       this[name] = defaults[name]
     }

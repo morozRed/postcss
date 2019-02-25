@@ -1,3 +1,4 @@
+import VisitorProcessor from './visitor-processor'
 import MapGenerator from './map-generator'
 import stringify from './stringify'
 import warnOnce from './warn-once'
@@ -27,7 +28,7 @@ class LazyResult {
     } else if (css instanceof LazyResult || css instanceof Result) {
       root = css.root
       if (css.map) {
-        if (typeof opts.map === 'undefined') opts.map = { }
+        if (typeof opts.map === 'undefined') opts.map = {}
         if (!opts.map.inline) opts.map.inline = false
         opts.map.prev = css.map
       }
@@ -193,8 +194,8 @@ class LazyResult {
       if (!('from' in this.opts)) {
         warnOnce(
           'Without `from` option PostCSS could generate wrong source map ' +
-          'and will not find Browserslist config. Set it to CSS file path ' +
-          'or to `undefined` to prevent this warning.'
+            'and will not find Browserslist config. Set it to CSS file path ' +
+            'or to `undefined` to prevent this warning.'
         )
       }
     }
@@ -258,8 +259,13 @@ class LazyResult {
           if (a[0] !== b[0] || parseInt(a[1]) > parseInt(b[1])) {
             console.error(
               'Unknown error from PostCSS plugin. Your current PostCSS ' +
-              'version is ' + runtimeVer + ', but ' + pluginName + ' uses ' +
-              pluginVer + '. Perhaps this is the source of the error below.'
+                'version is ' +
+                runtimeVer +
+                ', but ' +
+                pluginName +
+                ' uses ' +
+                pluginVer +
+                '. Perhaps this is the source of the error below.'
             )
           }
         }
@@ -281,13 +287,15 @@ class LazyResult {
       this.plugin += 1
 
       if (isPromise(promise)) {
-        promise.then(() => {
-          this.asyncTick(resolve, reject)
-        }).catch(error => {
-          this.handleError(error, plugin)
-          this.processed = true
-          reject(error)
-        })
+        promise
+          .then(() => {
+            this.asyncTick(resolve, reject)
+          })
+          .catch(error => {
+            this.handleError(error, plugin)
+            this.processed = true
+            reject(error)
+          })
       } else {
         this.asyncTick(resolve, reject)
       }
@@ -316,6 +324,8 @@ class LazyResult {
       this.plugin = 0
       this.asyncTick(resolve, reject)
     }).then(() => {
+      VisitorProcessor.run(this.result.root)
+    }).then(() => {
       this.processed = true
       return this.stringify()
     })
@@ -328,8 +338,7 @@ class LazyResult {
     this.processed = true
 
     if (this.processing) {
-      throw new Error(
-        'Use process(css).then(cb) to work with async plugins')
+      throw new Error('Use process(css).then(cb) to work with async plugins')
     }
 
     if (this.error) throw this.error
@@ -337,8 +346,7 @@ class LazyResult {
     for (let plugin of this.result.processor.plugins) {
       let promise = this.run(plugin)
       if (isPromise(promise)) {
-        throw new Error(
-          'Use process(css).then(cb) to work with async plugins')
+        throw new Error('Use process(css).then(cb) to work with async plugins')
       }
     }
 

@@ -19,6 +19,10 @@ class Rule extends Container {
     if (!this.nodes) this.nodes = []
   }
 
+  accept (visitor) {
+    visitor.onRule(this)
+  }
+
   /**
    * An array containing the rule’s individual selectors.
    * Groups of selectors are split at commas.

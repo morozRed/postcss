@@ -62,7 +62,7 @@ class Container extends Node {
    */
   each (callback) {
     if (!this.lastEach) this.lastEach = 0
-    if (!this.indexes) this.indexes = { }
+    if (!this.indexes) this.indexes = {}
 
     this.lastEach += 1
     let id = this.lastEach
@@ -112,8 +112,10 @@ class Container extends Node {
         e.postcssNode = child
         if (e.stack && child.source && /\n\s{4}at /.test(e.stack)) {
           let s = child.source
-          e.stack = e.stack.replace(/\n\s{4}at /,
-            `$&${ s.input.from }:${ s.start.line }:${ s.start.column }$&`)
+          e.stack = e.stack.replace(
+            /\n\s{4}at /,
+            `$&${ s.input.from }:${ s.start.line }:${ s.start.column }$&`
+          )
         }
         throw e
       }
@@ -496,7 +498,7 @@ class Container extends Node {
   replaceValues (pattern, opts, callback) {
     if (!callback) {
       callback = opts
-      opts = { }
+      opts = {}
     }
 
     this.walkDecls(decl => {

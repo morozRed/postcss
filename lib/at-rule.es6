@@ -24,6 +24,10 @@ class AtRule extends Container {
     this.type = 'atrule'
   }
 
+  accept (visitor) {
+    visitor.onAtRule(this)
+  }
+
   append (...children) {
     if (!this.nodes) this.nodes = []
     return super.append(...children)

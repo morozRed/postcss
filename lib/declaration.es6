@@ -17,6 +17,10 @@ class Declaration extends Node {
     this.type = 'decl'
   }
 
+  accept (visitor) {
+    visitor.onDecl(this)
+  }
+
   /**
    * @memberof Declaration#
    * @member {string} prop The declaration’s property name.

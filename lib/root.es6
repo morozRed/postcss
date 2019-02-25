@@ -1,4 +1,5 @@
 import Container from './container'
+import Visitor from './visitor'
 
 /**
  * Represents a CSS file and contains all its parsed nodes.
@@ -14,6 +15,7 @@ class Root extends Container {
   constructor (defaults) {
     super(defaults)
     this.type = 'root'
+    this.visitors = []
     if (!this.nodes) this.nodes = []
   }
 
@@ -45,6 +47,16 @@ class Root extends Container {
     }
 
     return nodes
+  }
+
+  /**
+   * @param {string} visitRule node type to call a visitor on a specific node
+   * @param {function} callback visitor function to be called on visitor
+   * @returns {void}
+   */
+  on (visitRule, callback) {
+    console.log(`Setting up visitor for ${ visitRule }`)
+    this.visitors = [...this.visitors || [], new Visitor(visitRule, callback)]
   }
 
   /**

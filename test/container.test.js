@@ -736,3 +736,9 @@ it('forces Declaration#value to be string', () => {
   expect(typeof rule.first.value).toEqual('string')
   expect(typeof rule.last.value).toEqual('string')
 })
+
+it('pushes visitor to root visitors', () => {
+  let root = new Root()
+  root.on('decl', () => {})
+  expect(root.visitors).toHaveLength(1)
+})
